@@ -10,7 +10,7 @@ import jakarta.persistence.Table
 data class UserRegistration(
     @Id
     @Column(name = "username")
-    val username: String,
+    val username: String = "",
     @Column(name = "password")
-    val password: String
+    val password: String = ""
 )

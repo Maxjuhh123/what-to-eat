@@ -1,0 +1,18 @@
+.navBar {
+    height: fit-content;
+    max-height: 2%;
+    width: 100%;
+}
+
+.navBar a {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.line {
+    background-color: #89BA7C;
+    border: none;
+    height: 1px;
+    min-width: 100%;
+    width: 100%;
+}
