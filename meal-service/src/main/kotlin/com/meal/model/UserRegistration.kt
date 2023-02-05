@@ -13,4 +13,9 @@ data class UserRegistration(
     val username: String = "",
     @Column(name = "password")
     val password: String = ""
-)
+) {
+
+    fun toUserData() =
+        UserData(username)
+
+}
