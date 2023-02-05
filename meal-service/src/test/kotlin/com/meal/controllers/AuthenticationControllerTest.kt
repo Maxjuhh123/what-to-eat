@@ -1,7 +1,10 @@
 package com.meal.controllers
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.meal.exceptions.UserNotFoundException
+import com.meal.exceptions.UserUnauthorizedException
 import com.meal.exceptions.UsernameTakenException
+import com.meal.model.UserData
 import com.meal.model.UserRegistration
 import com.meal.services.AuthenticationService
 import com.ninjasquad.springmockk.MockkBean
@@ -19,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 
 @WebMvcTest(controllers = [AuthenticationController::class])
@@ -56,8 +60,55 @@ class AuthenticationControllerTest(
         }
             .andReturn().response
 
-        result.status shouldBe HttpStatus.NOT_MODIFIED.value()
+        result.status shouldBe HttpStatus.FORBIDDEN.value()
         verify(exactly = 1) { authenticationService.register(registration) }
+    }
+
+    should("authenticate with correct password") {
+        val request = UserRegistration(USERNAME, PASSWORD)
+        val expected = UserData(USERNAME)
+        every { authenticationService.authenticate(request) } returns expected
+
+        val result = mockMvc.get("/users/authenticate") {
+            contentType = MediaType.APPLICATION_JSON
+            content = mapper.writeValueAsString(request)
+            accept = MediaType.APPLICATION_JSON
+        }
+            .andReturn().response
+
+        result.status shouldBe HttpStatus.OK.value()
+        result.contentAsString shouldBe mapper.writeValueAsString(expected)
+        verify(exactly = 1) { authenticationService.authenticate(request) }
+    }
+
+    should("not authenticate with incorrect password") {
+        val request = UserRegistration(USERNAME, PASSWORD)
+        every { authenticationService.authenticate(request) } throws UserUnauthorizedException()
+
+        val result = mockMvc.get("/users/authenticate") {
+            contentType = MediaType.APPLICATION_JSON
+            content = mapper.writeValueAsString(request)
+            accept = MediaType.APPLICATION_JSON
+        }
+            .andReturn().response
+
+        result.status shouldBe HttpStatus.UNAUTHORIZED.value()
+        verify(exactly = 1) { authenticationService.authenticate(request) }
+    }
+
+    should("not authenticate with non-existing username") {
+        val request = UserRegistration(USERNAME, PASSWORD)
+        every { authenticationService.authenticate(request) } throws UserNotFoundException()
+
+        val result = mockMvc.get("/users/authenticate") {
+            contentType = MediaType.APPLICATION_JSON
+            content = mapper.writeValueAsString(request)
+            accept = MediaType.APPLICATION_JSON
+        }
+            .andReturn().response
+
+        result.status shouldBe HttpStatus.NOT_FOUND.value()
+        verify(exactly = 1) { authenticationService.authenticate(request) }
     }
 
 }) {

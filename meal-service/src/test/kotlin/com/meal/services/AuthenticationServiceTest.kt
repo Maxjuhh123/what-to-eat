@@ -1,10 +1,14 @@
 package com.meal.services
 
+import com.meal.exceptions.UserNotFoundException
+import com.meal.exceptions.UserUnauthorizedException
 import com.meal.exceptions.UsernameTakenException
+import com.meal.model.UserData
 import com.meal.model.UserRegistration
 import com.meal.repositories.UserRegistrationRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -38,9 +42,36 @@ class AuthenticationServiceTest: ShouldSpec({
         verify(exactly = 0) { userRegistrationRepository.saveAndFlush(registration) }
     }
 
+    should("authenticate with correct password") {
+        val request = UserRegistration(USERNAME, PASSWORD)
+        every { userRegistrationRepository.findById(USERNAME) } returns Optional.of(request)
+
+        val result = authenticationService.authenticate(request)
+
+        result shouldBe UserData(USERNAME)
+        verify { userRegistrationRepository.findById(USERNAME) }
+    }
+
+    should("not authenticate with incorrect password") {
+        val request = UserRegistration(USERNAME, PASSWORD)
+        val otherPasswordResult = UserRegistration(USERNAME, "other password")
+        every { userRegistrationRepository.findById(USERNAME) } returns Optional.of(otherPasswordResult)
+
+        shouldThrow<UserUnauthorizedException> { authenticationService.authenticate(request) }
+        verify { userRegistrationRepository.findById(USERNAME) }
+    }
+
+    should("not authenticate with non-existing username") {
+        val request = UserRegistration(USERNAME, PASSWORD)
+        every { userRegistrationRepository.findById(USERNAME) } returns Optional.empty()
+
+        shouldThrow<UserNotFoundException> { authenticationService.authenticate(request) }
+        verify { userRegistrationRepository.findById(USERNAME) }
+    }
+
 }) {
     companion object {
-        private const val USERNAME = "MDG123"
+        private const val USERNAME = "John"
         private const val PASSWORD = "passcode"
     }
 }
