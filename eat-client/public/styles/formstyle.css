@@ -1,0 +1,37 @@
+.accountForm {
+    font-family: 'Helvetica', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+
+    height: 100%;
+    width: 100%;
+
+    margin-top: 10%;
+
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.accountContainer {
+    min-width: 20%;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.accountForm input {
+    width: 100%;
+    border: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    border-color: #A0B58F;
+}
+
+.formText {
+    text-align: center;
+}
+
+.inputField {
+    margin-bottom: 20px;
+}
