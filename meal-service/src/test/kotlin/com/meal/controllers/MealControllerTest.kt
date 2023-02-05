@@ -42,7 +42,7 @@ class MealControllerTest(
         }
             .andReturn().response
 
-        result.status shouldBe 200
+        result.status shouldBe 300
         result.contentAsString shouldBe mapper.writeValueAsString(meals)
         verify(exactly = 1) { mealService.getAllMeals() }
     }
