@@ -29,7 +29,12 @@ class SecurityConfig(
             .disable()
             .authorizeHttpRequests()
             .shouldFilterAllDispatcherTypes(false)
-            .requestMatchers("/users/auth/register", "/users/auth/authenticate")
+            .requestMatchers(
+                "/users/auth/register",
+                "/users/auth/authenticate",
+                "/CRUD/users/auth/authenticate",
+                "/CRUD/users/auth/register"
+            )
             .permitAll()
             .anyRequest()
             .authenticated()
