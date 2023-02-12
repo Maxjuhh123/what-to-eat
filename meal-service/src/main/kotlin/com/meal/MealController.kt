@@ -1,9 +1,8 @@
-package com.meal.controllers
+package com.meal
 
 import com.meal.model.Meal
 import com.meal.model.MealPostRequest
 import com.meal.model.Meals
-import com.meal.services.MealService
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.GetMapping

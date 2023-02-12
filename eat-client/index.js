@@ -25,7 +25,6 @@ app.post("/", (req, res) => {
 
 app.post('/register', (req, res) => {
     authenticationController.register(req.body);
-    console.log(req.body);
     res.status = 200;
     res.sendFile("register.html", { root: "./public" });
 });
