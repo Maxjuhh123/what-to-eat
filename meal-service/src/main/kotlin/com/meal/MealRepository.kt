@@ -1,4 +1,4 @@
-package com.meal.repositories
+package com.meal
 
 import com.meal.model.Meal
 import org.springframework.data.jpa.repository.JpaRepository

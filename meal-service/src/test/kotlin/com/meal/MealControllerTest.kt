@@ -1,10 +1,9 @@
-package com.meal.controllers
+package com.meal
 
-import com.meal.exceptions.MealNotFoundException
+import com.meal.model.MealNotFoundException
 import com.meal.model.Meal
 import com.meal.model.MealPostRequest
 import com.meal.model.Meals
-import com.meal.services.MealService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.core.spec.IsolationMode
@@ -15,15 +14,17 @@ import io.mockk.every
 import io.mockk.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
 import java.math.BigDecimal
 
-@WebMvcTest(controllers = [MealController::class])
+@SpringBootTest(classes = [MealApplication::class])
 @AutoConfigureMockMvc
+@WithMockUser
 class MealControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @MockkBean private val mealService: MealService

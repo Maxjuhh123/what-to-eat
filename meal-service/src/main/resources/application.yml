@@ -1,0 +1,16 @@
+# application config
+server:
+  port: 8081
+
+# database config
+spring:
+  datasource:
+    url: jdbc:h2:mem:mealdb
+    driverClassName: org.h2.Driver
+    username: dinner
+    password: dinnertime123
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+jwt:
+  key: 294A404E635266556A586E3272357538782F413F442A472D4B6150645367566B
