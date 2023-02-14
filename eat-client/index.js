@@ -14,8 +14,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+/**
+ * Redirect to homepage
+ */
 app.get("/", (req, res) => {
-    res.sendFile("index.html", { root: "./public" });
+    res.redirect("/home")
+})
+
+/**
+ * Go to homepage
+ */
+app.get("/home", (req, res) => {
+    const token = getToken(req)
+    if (token) {
+        res.sendFile("myhome.html", { root: "./public" });
+    } else {
+        res.sendFile("home.html", { root: "./public" });
+    }
 });
 
 /**
@@ -32,39 +47,36 @@ app.get("/login", (req, res) => {
     res.sendFile("login.html", { root: "./public" });
 });
 
-app.post("/", (req, res) => {
-    let meal = mealController.addMeal(req.body);
-    res.status = 200;
-})
-
 /**
  * Create an accoutn and redirect to the correct page
  * if registered successfully, set cookie of JWT as well
  * 
- * TODO: error handling + correct redirect
+ * TODO: error handling
  */
 app.post('/register', (req, res) => {
-    authenticationController.register(req.body).then(token => res
-        .cookie("access_token", token, { httpOnly: true })
-        .status(200)
-        .redirect("/")
-    );
+    return authenticationController.register(req.body).then(token => { 
+        res.cookie("access_token", token, { httpOnly: true })
+        res.redirect("/")
+    });
 });
 
 /**
  * Login to your account and redirect to the correct page
  * if logged in successfully, set cookie of JWT as well
  * 
- * TODO: error handling + correct redirect
+ * TODO: error handling
  */
 app.post('/login', (req, res) => {
-    authenticationController.authenticate(req.body).then(token => res
-        .cookie("access_token", token, { httpOnly: true })
-        .status(200)
-        .redirect("/")
-    );
+    return authenticationController.authenticate(req.body).then(token => { 
+        res.cookie("access_token", token, { httpOnly: true })
+        res.redirect("/")
+    });
 });
 
 app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
 });
+
+function getToken(request) {
+    return request.cookies.access_token;
+}
