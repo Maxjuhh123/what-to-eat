@@ -1,12 +1,27 @@
-.navBar {
-    height: fit-content;
+navbar {
     max-height: 2%;
+    height: fit-content;
     width: 100%;
+    border: 2px;
+    border-color: blue;
 }
 
-.navBar a {
-    margin-left: 20px;
-    margin-right: 20px;
+.nav-list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nav-item {
+    list-style: none;
+    margin-right: 2rem;
+}
+
+.nav-right-item {
+    justify-self: flex-end;
+    float: right;
+    text-align: right;
+    margin-left: auto;
 }
 
 .line {
@@ -15,4 +30,22 @@
     height: 1px;
     min-width: 100%;
     width: 100%;
+}
+
+navbar a:link { 
+    text-decoration: none; 
+    color: black;
+}
+
+navbar a:visited { 
+    text-decoration: none; 
+    color: black;
+}
+
+navbar a:hover { 
+    text-decoration: none; 
+}
+
+navbar a:active { 
+    text-decoration: none; 
 }
