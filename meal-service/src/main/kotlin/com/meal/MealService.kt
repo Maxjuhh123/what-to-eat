@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class MealService(
-    private val mealRepository: MealRepository
+    private val mealRepository: MealRepository,
 ) {
 
     /**
@@ -40,7 +40,16 @@ class MealService(
      * @param mealPostRequest - contains data of the meal to add.
      * @return the created meal
      */
-    fun addMeal(mealPostRequest: MealPostRequest): Meal =
-        mealRepository.saveAndFlush(mealPostRequest.toMeal(null))
+    fun addMeal(mealPostRequest: MealPostRequest, userId: Long): Meal =
+        mealRepository.saveAndFlush(mealPostRequest.toMeal(null, userId))
+
+    /**
+     * Check if a meal exists by id.
+     *
+     * @param mealId - the id of the meal
+     * @return true iff the meal exists
+     */
+    fun existsById(mealId: Long) =
+        mealRepository.existsById(mealId)
 
 }

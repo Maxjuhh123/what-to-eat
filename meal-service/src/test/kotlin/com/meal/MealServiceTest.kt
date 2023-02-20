@@ -75,14 +75,28 @@ class MealServiceTest: ShouldSpec({
 
     should("add meal successfully") {
         val request = MealPostRequest("name", "description", BigDecimal(1.0))
-        val meal = request.toMeal(null)
+        val meal = request.toMeal(null, USERID)
         val mealWithId = Meal(MEAL_ID, "name", "description", BigDecimal(1.0))
         every { mealRepository.saveAndFlush(meal) } returns mealWithId
 
-        val result = mealService.addMeal(request)
+        val result = mealService.addMeal(request, USERID)
 
         result shouldBe mealWithId
         verify(exactly = 1) { mealRepository.saveAndFlush(meal) }
+    }
+
+    should("exist by id") {
+        every { mealRepository.existsById(MEAL_ID) } returns true
+
+        mealService.existsById(MEAL_ID) shouldBe true
+        verify(exactly = 1) { mealRepository.existsById(MEAL_ID) }
+    }
+
+    should("not exist by id") {
+        every { mealRepository.existsById(MEAL_ID) } returns false
+
+        mealService.existsById(MEAL_ID) shouldBe false
+        verify(exactly = 1) { mealRepository.existsById(MEAL_ID) }
     }
 
 }) {
@@ -90,5 +104,6 @@ class MealServiceTest: ShouldSpec({
 
     companion object {
         private const val MEAL_ID = 1L
+        private const val USERID = 2L
     }
 }

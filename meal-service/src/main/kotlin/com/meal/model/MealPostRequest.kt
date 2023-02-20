@@ -8,7 +8,13 @@ data class MealPostRequest(
     val price: BigDecimal
 ) {
 
-    fun toMeal(mealId: Long?) =
-        Meal(mealId = mealId, name = name, description = description, price = price)
+    fun toMeal(mealId: Long?, userId: Long) =
+        Meal(
+            mealId = mealId,
+            name = name,
+            description = description,
+            price = price,
+            userId = userId
+        )
 
 }
