@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails
 data class User(
         @Id
         @GeneratedValue
-        private val userId: Long? = null,
+        val userId: Long? = null,
         @Column(name = "username")
         private val username: String = "",
         @Column(name = "password")

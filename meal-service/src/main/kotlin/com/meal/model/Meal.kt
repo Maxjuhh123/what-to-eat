@@ -20,5 +20,7 @@ data class Meal(
     @Column(name = "description")
     val description: String = "",
     @Column(name = "price")
-    val price: BigDecimal = BigDecimal(0)
+    val price: BigDecimal = BigDecimal(0),
+    @Column(name = "userId")
+    val userId: Long = 0L
 )

@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.post
@@ -24,7 +24,7 @@ import java.math.BigDecimal
 
 @SpringBootTest(classes = [MealApplication::class])
 @AutoConfigureMockMvc
-@WithMockUser
+@WithUserDetails("test-user")
 class MealControllerTest(
     @Autowired private val mockMvc: MockMvc,
     @MockkBean private val mealService: MealService
@@ -94,7 +94,7 @@ class MealControllerTest(
     should("add meal successfully") {
         val request = MealPostRequest("name", "description", BigDecimal(2.0))
         val meal = Meal(MEAL_ID, "name", "description", BigDecimal(2.0))
-        every { mealService.addMeal(request) } returns meal
+        every { mealService.addMeal(request, any()) } returns meal
 
         val result = mockMvc.post("/meal") {
             contentType = MediaType.APPLICATION_JSON
@@ -105,7 +105,7 @@ class MealControllerTest(
 
         result.status shouldBe 200
         result.contentAsString shouldBe mapper.writeValueAsString(meal)
-        verify(exactly = 1) { mealService.addMeal(request)}
+        verify(exactly = 1) { mealService.addMeal(request, any())}
     }
 
 }) {

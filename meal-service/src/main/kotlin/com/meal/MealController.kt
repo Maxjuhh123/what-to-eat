@@ -3,8 +3,10 @@ package com.meal
 import com.meal.model.Meal
 import com.meal.model.MealPostRequest
 import com.meal.model.Meals
+import com.meal.util.AuthUtil
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.ok
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.RequestBody
@@ -46,7 +48,10 @@ class MealController(
      * @returns - 200 with the created meal
      */
     @PostMapping
-    fun addMeal(@RequestBody mealPostRequest: MealPostRequest): ResponseEntity<Meal> =
-        ok(mealService.addMeal(mealPostRequest))
+    fun addMeal(
+        authentication: Authentication,
+        @RequestBody mealPostRequest: MealPostRequest
+    ): ResponseEntity<Meal> =
+        ok(mealService.addMeal(mealPostRequest, AuthUtil.extractUserId(authentication)))
 
 }
